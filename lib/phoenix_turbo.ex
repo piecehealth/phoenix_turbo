@@ -1,6 +1,8 @@
 defmodule PhoenixTurbo do
   @moduledoc """
   Use Turbo in your Phoenix app.
+
+  See https://github.com/piecehealth/phoenix_turbo
   """
 
   @doc """
@@ -24,7 +26,7 @@ defmodule PhoenixTurbo do
   end
 
   @doc """
-  Define plug method `turbo_frame`. Remove the layout if it's a turbo-frame request.
+  Define plug method `handle_turbo_frame`. Remove the layout if it's a turbo-frame request.
   """
   def router do
     quote do

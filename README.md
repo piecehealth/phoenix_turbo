@@ -13,8 +13,8 @@ def deps do
 end
 ```
 
-2. [Install Turbo via npm](https://turbo.hotwire.dev/handbook/installing#as-an-npm-package)
-3. [Install Stimulus](https://stimulus.hotwire.dev/handbook/installing#using-webpack) (Optional) 
+2. [Install Turbo](https://turbo.hotwire.dev/handbook/installing#as-an-npm-package)
+3. [Install Stimulus](https://stimulus.hotwire.dev/handbook/installing#using-webpack) (Optional)
 
 ## Setup
 in `lib/[my_app]_web.ex`
@@ -104,21 +104,14 @@ defmodule ChatWeb.MessageController do
 
   plug :set_room
 
-  def create(conn, %{"message" => message_params}) do
-    room = conn.assigns.room
+  def create(conn, %{"message" => message_params, "room_id" => room_id}) do
     message = Rooms.create_message!(Map.put(message_params, "room_id", room.id))
 
     if turbo_stream_request?(conn) do                                         # <- turbo_stream_request?
       render_turbo_stream(conn, "create_turbo_stream.html", message: message) # <- render_turbo_stream
     else
-      redirect(conn, to: Routes.room_path(conn, :show, conn.assigns.room))
+      redirect(conn, to: Routes.room_path(conn, :show, room_id))
     end
-  end
-
-  defp set_room(conn, _) do
-    room_id = conn.params["room_id"]
-    room = Rooms.get_room!(room_id)
-    assign(conn, :room, room)
   end
 end
 ```
