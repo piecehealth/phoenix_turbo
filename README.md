@@ -31,6 +31,21 @@ in `lib/[my_app]_web.ex`
    end
  end
 ```
+
+Configure new mime type
+in `config/config.exs`
+```diff
++  config :mime, :types, %{
++    "text/vnd.turbo-stream.html" => ["turbo-html"]
++  }
+```
+
+And recompile the mime plug after that
+
+```
+  mix deps.clean mime --build
+  mix deps.get
+```
 in `lib/[my_app]_web/endpoint.ex`
 ```diff
  defmodule MyAppWeb.Endpoint do
@@ -50,7 +65,7 @@ in `lib/[my_app]_web/channels/user_socket.ex`
 in `lib/[my_app]_web/router.ex`
 ```diff
    pipeline :browser do
-     plug :accepts, ["html"]
++    plug :accepts, ["html", "turbo-html"]
      plug :fetch_session
      plug :fetch_flash
      plug :protect_from_forgery
