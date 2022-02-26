@@ -7,12 +7,17 @@ defmodule PhoenixTurbo.ControllerHelper do
   @doc """
   Return true if it's a "turbo-stream" request.
   E.g. Clicking link or submitting form inside the <turbo-frame> tag.
+  Configure new mime type with
+  config :mime, :types, %{
+    "text/vnd.turbo-stream.html" => ["turbo-html"]
+  }
+  And then
+  mix deps.clean mime --build
+  mix deps.get
   """
   @spec turbo_stream_request?(Plug.Conn.t()) :: boolean()
   def turbo_stream_request?(conn) do
-    [accept_types] = get_req_header(conn, "accept")
-    # `accept_types` is "text/vnd.turbo-stream.html, text/html, application/xhtml+xml"
-    String.starts_with?(accept_types, @turbo_stream_content_type)
+    get_format(conn) == "turbo-html"
   end
 
   @doc """
